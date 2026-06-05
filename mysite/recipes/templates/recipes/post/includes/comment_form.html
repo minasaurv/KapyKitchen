@@ -1,0 +1,24 @@
+{% load icons %}
+<section class="card stack">
+    <h2>{% icon 'comment' extra_classes='icon-inline' %}Leave a Comment</h2>
+    {% if request.user.is_authenticated %}
+        <p>Share feedback, questions, etc.</p>
+        <form action="{% url 'recipes:post_comment' post.id %}"
+              method="post"
+              class="comment-form">
+            {% if form.body.errors %}{{ form.body.errors }}{% endif %}
+            {{ form.body }}
+            {% csrf_token %}
+            <p>
+                <button type="submit" class="btn">
+                    {% icon 'comment' extra_classes='button-icon' %}
+                    Post Comment
+                </button>
+            </p>
+        </form>
+    {% else %}
+        <p>
+            Please <a href="{% url 'login' %}?next={{ request.path|urlencode }}">log in</a> to leave a comment.
+        </p>
+    {% endif %}
+</section>
