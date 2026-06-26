@@ -153,6 +153,13 @@ USE_TZ = True
 # Use an absolute URL path so static assets resolve correctly
 # in development and production (e.g., /static/recipes/style.css)
 STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+CSRF_TRUSTED_ORIGINS = config(
+    "DJANGO_CSRF_TRUSTED_ORIGINS",
+    default="",
+    cast=lambda value: [origin.strip() for origin in value.split(",") if origin.strip()],
+)
 
 INTERNAL_IPS = ["127.0.0.1"]
 

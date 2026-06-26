@@ -1,0 +1,11 @@
+Django==6.0.1
+Markdown==3.10
+django-debug-toolbar==6.3.0
+django-icons==26.1
+django-redis==6.0.0
+django-taggit==5.0.1
+gunicorn>=23,<24
+psycopg[binary]==3.3.3
+python-decouple==3.8
+redis==7.4.0
+social-auth-app-django==5.4.0
