@@ -1,0 +1,16 @@
+[Unit]
+Description=Gunicorn daemon for KapyKitchen
+After=network.target
+
+[Service]
+User=server
+Group=www-data
+WorkingDirectory=/home/server/personal-project-minasaurv/mysite
+EnvironmentFile=/home/server/personal-project-minasaurv/mysite/.env
+ExecStart=/home/server/personal-project-minasaurv/mysite/.venv/bin/gunicorn \
+    --workers 3 \
+    --bind unix:/run/gunicorn.sock \
+    mysite.wsgi:application
+
+[Install]
+WantedBy=multi-user.target
