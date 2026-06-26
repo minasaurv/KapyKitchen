@@ -7,9 +7,11 @@ User=server
 Group=www-data
 WorkingDirectory=/home/server/personal-project-minasaurv/mysite
 EnvironmentFile=/home/server/personal-project-minasaurv/mysite/.env
+RuntimeDirectory=gunicorn
+RuntimeDirectoryMode=0755
 ExecStart=/home/server/personal-project-minasaurv/mysite/.venv/bin/gunicorn \
     --workers 3 \
-    --bind unix:/run/gunicorn.sock \
+    --bind unix:/run/gunicorn/gunicorn.sock \
     mysite.wsgi:application
 
 [Install]
