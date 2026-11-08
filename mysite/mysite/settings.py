@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from pathlib import Path
 from decouple import config
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,10 +30,10 @@ SECRET_KEY = config(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DJANGO_DEBUG", default=True, cast=bool)
 
-# Parse comma-separated hosts from environment for safer local/prod switching.
+# Parse comma-separated hosts from the environment.
 ALLOWED_HOSTS = config(
     "DJANGO_ALLOWED_HOSTS",
-    default="localhost,127.0.0.1,mysite.com",
+    default="localhost,127.0.0.1,mysite.com,recipes.minasaur.com",
     cast=lambda value: [host.strip() for host in value.split(",") if host.strip()],
 )
 
@@ -56,6 +57,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -93,16 +95,22 @@ WSGI_APPLICATION = "mysite.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": config("POSTGRES_DB", default="kapykitchen"),
-        "USER": config("POSTGRES_USER", default="mina"),
-        "PASSWORD": config("POSTGRES_PASSWORD", default="blah"),
-        "HOST": config("POSTGRES_HOST", default="127.0.0.1"),
-        "PORT": config("POSTGRES_PORT", default="5432"),
+DATABASE_URL = config("DATABASE_URL", default="")
+if DATABASE_URL:
+    DATABASES = {
+        "default": dj_database_url.parse(DATABASE_URL, conn_max_age=600),
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": config("POSTGRES_DB", default="kapykitchen"),
+            "USER": config("POSTGRES_USER", default="mina"),
+            "PASSWORD": config("POSTGRES_PASSWORD", default="blah"),
+            "HOST": config("POSTGRES_HOST", default="127.0.0.1"),
+            "PORT": config("POSTGRES_PORT", default="5432"),
+        }
+    }
 
 CACHES = {
     "default": {
@@ -154,6 +162,14 @@ USE_TZ = True
 # in development and production (e.g., /static/recipes/style.css)
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 CSRF_TRUSTED_ORIGINS = config(
     "DJANGO_CSRF_TRUSTED_ORIGINS",
