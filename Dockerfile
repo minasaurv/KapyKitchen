@@ -1,6 +1,7 @@
 FROM python:3.13-slim
 
-ENV PYTHONUNBUFFERED=1
+ENV PYTHONUNBUFFERED=1 \
+    DJANGO_DEBUG=False
 
 WORKDIR /app
 
@@ -12,4 +13,4 @@ RUN python mysite/manage.py collectstatic --noinput
 
 EXPOSE 8000
 
-CMD ["sh", "-c", "gunicorn --chdir mysite mysite.wsgi --bind 0.0.0.0:${PORT:-8000}"]
+CMD ["sh", "-c", "python mysite/manage.py migrate --noinput && exec gunicorn --chdir mysite mysite.wsgi --bind 0.0.0.0:${PORT:-8000}"]
