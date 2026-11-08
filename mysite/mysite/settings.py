@@ -33,7 +33,7 @@ DEBUG = config("DJANGO_DEBUG", default=True, cast=bool)
 # Parse comma-separated hosts from the environment.
 ALLOWED_HOSTS = config(
     "DJANGO_ALLOWED_HOSTS",
-    default="localhost,127.0.0.1,mysite.com,recipes.minasaur.com",
+    default="localhost,127.0.0.1,recipes.minasaur.com",
     cast=lambda value: [host.strip() for host in value.split(",") if host.strip()],
 )
 

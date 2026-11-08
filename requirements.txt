@@ -10,4 +10,5 @@ psycopg[binary]==3.3.3
 python-decouple==3.8
 redis==7.4.0
 social-auth-app-django==5.4.0
+social-auth-core==4.8.5
 whitenoise>=6.9,<7
